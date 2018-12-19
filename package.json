@@ -1,0 +1,19 @@
+{
+  "name": "climahoje",
+  "version": "1.0.0",
+  "description": "Verificar o clima com base na pesquisa.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "Leandro Lima",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "jade": "^1.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
