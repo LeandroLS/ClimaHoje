@@ -6,7 +6,6 @@ const path = require('path');
 
 app.use(express.static(path.normalize(__dirname + '/source/public')));
 
-
 const viewsPath = path.normalize(__dirname + '/source/views/');
 
 app.set('views', viewsPath);
@@ -25,11 +24,15 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.post('/teste', (req, res) => {
-    console.log(req.body);
+app.post('/', (req, res) => {
     axios.get(`https://api.hgbrasil.com/weather/?format=json&city_name=${encodeURI(req.body.city)}&key=948f7313`)
         .then((result)=> {
-            res.json(result.data);
+            res.render('index', { 
+                    success : true,
+                    city : result.data.results.city,
+                    temperature : result.data.results.temp
+                }
+            );
         }
     ).catch((erro) => {
         res.send('deu erro' + erro);
