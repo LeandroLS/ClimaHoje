@@ -3,10 +3,13 @@ html
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible",content="ie=edge")
-        title document
+        title Clima Hoje
         link(rel="stylesheet", href="/css/bootstrap.min.css")
     body
         div.container
-            h1.text-warning.text-center aaa
+            form(action="teste", method="post")
+                div.form-group
+                    input.form-control(type="text", name="city" placeholder="Local. Ex: São Paulo")
+                button.btn.btn-primary(type="submit") Pesquisar
     script(src='/js/jquery.min.js')
     script(src='/js/bootstrap.min.js')
