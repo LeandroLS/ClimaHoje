@@ -31,22 +31,31 @@ const OpenWeatherMapURL = 'http://api.openweathermap.org/data/2.5/weather';
 const OpenWeatherMapURLKey = '1d45b5f14ba9cbc264e3c2b018b6bdfd';
 
 app.post('/', (req, res) => {
-    axios.get(`${HGWeatherURL}?format=json&city_name=${encodeURI(req.body.city)}&key=${HGWeatherKey}`)
-        .then((result)=> {
-            res.render('index', { 
-                    success : true,
-                    city : result.data.results.city,
-                    temperature : result.data.results.temp
+    async function getData(){
+        return axios.get(`${HGWeatherURL}?format=json&city_name=${encodeURI(req.body.city)}&key=${HGWeatherKey}`)
+            .then((result) => {
+                return {
+                    HGWeather: {
+                        success : true,
+                        city : result.data.results.city,
+                        temperature : result.data.results.temp
+                    }
                 }
-            );
-        }
-    ).then((result) => {
-        res.send('olá');
-    }).catch((erro) => {
-        res.render('index', {
-            erro : true
-        });
-    });
+            }
+        ).catch((erro) => {
+            return {
+                HGWeather: {
+                    success : false
+                }
+            }
+        })
+    };
+
+    (async () => {
+        let data = await getData();
+        console.log(data);
+    })()
+   
 });
 
 app.listen('3000');
