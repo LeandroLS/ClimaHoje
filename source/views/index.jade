@@ -14,11 +14,17 @@ html
                 button.btn.btn-primary(type="submit") Pesquisar
             div.row
                 div.col-md-12
-                    if(success)
+                    if(HGWeather && HGWeather.success)
                         p !{city} !{temperature} °C
-                    if(erro)
+                        p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]
+                    else if (HGWeather && !HGWeather.success)
                         p.text-danger Não foi possível buscar informações de temperatura.
-                    p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]
+                        p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]
+                div.col-md-12
+                    if(OpenWeatherMap && OpenWeatherMap.success)
+                        p deu certo
+                    else if (OpenWeatherMap && !OpenWeatherMap.success)
+                        p Não deu certo
 
     script(src='/js/jquery.min.js')
     script(src='/js/bootstrap.min.js')

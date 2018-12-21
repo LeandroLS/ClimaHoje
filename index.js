@@ -31,33 +31,41 @@ const OpenWeatherMapURL = 'http://api.openweathermap.org/data/2.5/weather';
 const OpenWeatherMapURLKey = '1d45b5f14ba9cbc264e3c2b018b6bdfd';
 
 app.post('/', (req, res) => {
-    async function getData(){
-        return axios.get(`${HGWeatherURL}?format=json&city_name=${encodeURI(req.body.city)}&key=${HGWeatherKey}`)
-            .then((result) => {
-                return {
-                    HGWeather: {
-                        success : true,
-                        city : result.data.results.city,
-                        temperature : result.data.results.temp
-                    }
-                }
-            }
-        ).catch((erro) => {
-            return {
-                HGWeather: {
-                    success : false
-                }
-            }
-        })
-    };
 
-    (async () => {
-        let data = await getData();
-        console.log(data);
-    })()
+    let HGWeather = axios.get(`${HGWeatherURL}?format=json&city_name=${encodeURI(req.body.city)}&key=${HGWeatherKey}`)
+    .then((result) => {
+            return {
+                success : true,
+                city : result.data.results.city,
+                temperature : result.data.results.temp
+            }
+        }
+    ).catch((erro) => {
+        return {
+            success : false
+        }
+    });
+
+    let OpenWeatherMap = axios.get(`${OpenWeatherMapURL}?q=${encodeURI(req.body.city)},BR&appid=${OpenWeatherMapURLKey}&units=Metric`)
+    .then((result) => {
+            return  {
+                success : true,
+            }
+        }
+    ).catch((erro)=>{
+        return {
+            success: false
+        }
+    });
+   
+    Promise.all([HGWeather, OpenWeatherMap]).then((data)=>{
+        res.render('index', { 
+            HGWeather : data[0], 
+            OpenWeatherMap : data[1]
+        });
+    });
    
 });
 
 app.listen('3000');
 
-// ?q=Bahia,BR&appid=&units=Metric
