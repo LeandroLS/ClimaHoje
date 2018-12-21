@@ -13,9 +13,12 @@ html
                     input.form-control(type="text", name="city" placeholder="Local. Ex: São Paulo")
                 button.btn.btn-primary(type="submit") Pesquisar
             div.row
-                if(success)
-                    div.col-md-12
+                div.col-md-12
+                    if(success)
                         p !{city} !{temperature} °C
-                        p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]
+                    if(erro)
+                        p.text-danger Não foi possível buscar informações de temperatura.
+                    p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]
+
     script(src='/js/jquery.min.js')
     script(src='/js/bootstrap.min.js')
