@@ -30,6 +30,9 @@ const HGWeatherKey = '948f7313';
 const OpenWeatherMapURL = 'http://api.openweathermap.org/data/2.5/weather';
 const OpenWeatherMapURLKey = '1d45b5f14ba9cbc264e3c2b018b6bdfd';
 
+const ApixuURL = 'http://api.apixu.com/v1/current.json';
+const ApixuKey = 'bb7a25ba9fc940aaa60183555182112';
+
 app.post('/', (req, res) => {
 
     let HGWeather = axios.get(`${HGWeatherURL}?format=json&city_name=${encodeURI(req.body.city)}&key=${HGWeatherKey}`)
@@ -50,6 +53,8 @@ app.post('/', (req, res) => {
     .then((result) => {
             return  {
                 success : true,
+                city : result.data.name,
+                temperature : result.data.main.temp
             }
         }
     ).catch((erro)=>{
@@ -57,15 +62,28 @@ app.post('/', (req, res) => {
             success: false
         }
     });
+
+    let Apixu = axios.get(`${ApixuURL}?key=${ApixuKey}&q=${encodeURI(req.body.city)},BR`)
+    .then((result) => {
+        return {
+            success : true,
+            city : result.data.location.name,
+            temperature : result.data.current.temp_c
+        }
+    }).catch((erro)=>{
+        return { 
+            success : false
+        }
+    });
    
-    Promise.all([HGWeather, OpenWeatherMap]).then((data)=>{
+    Promise.all([HGWeather, OpenWeatherMap, Apixu]).then((data)=>{
         res.render('index', { 
             HGWeather : data[0], 
-            OpenWeatherMap : data[1]
+            OpenWeatherMap : data[1],
+            Apixu : data[2]
         });
     });
    
 });
 
 app.listen('3000');
-

@@ -14,17 +14,27 @@ html
                 button.btn.btn-primary(type="submit") Pesquisar
             div.row
                 div.col-md-12
+                    if(OpenWeatherMap && OpenWeatherMap.success)
+                        p !{OpenWeatherMap.city}, !{OpenWeatherMap.temperature} °C
+                        p Fonte: #[a(href="https://openweathermap.org/", target="_blank") OpenWeatherMap]
+                    else if (OpenWeatherMap && !OpenWeatherMap.success)
+                        p.text-danger Não foi possível buscar informações de temperatura.
+                        p Fonte: #[a(href="https://openweathermap.org/", target="_blank") OpenWeatherMap]
+                div.col-md-12
+                    if(Apixu && Apixu.success)
+                        p !{Apixu.city}, !{Apixu.temperature} °C
+                        p Fonte: #[a(href="https://www.apixu.com/", target="_blank") Apixu]
+                    else if (Apixu && !Apixu.success)
+                        p.text-danger Não foi possível buscar informações de temperatura.
+                        p Fonte: #[a(href="https://www.apixu.com/", target="_blank") Apixu]
+                div.col-md-12
                     if(HGWeather && HGWeather.success)
-                        p !{city} !{temperature} °C
+                        p !{HGWeather.city} !{HGWeather.temperature} °C
                         p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]
                     else if (HGWeather && !HGWeather.success)
                         p.text-danger Não foi possível buscar informações de temperatura.
-                        p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]
-                div.col-md-12
-                    if(OpenWeatherMap && OpenWeatherMap.success)
-                        p deu certo
-                    else if (OpenWeatherMap && !OpenWeatherMap.success)
-                        p Não deu certo
+                        p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]            
+                    
 
     script(src='/js/jquery.min.js')
     script(src='/js/bootstrap.min.js')
