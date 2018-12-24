@@ -7,6 +7,7 @@ html
         link(rel="stylesheet", href="/css/bootstrap.min.css")
         style(type="text/css"). 
             li { list-style-type: none; }
+            body { background-image: url('/images/bg1.png'); }
     body
         nav.navbar.navbar-expand-md.navbar-dark.bg-dark
             a.navbar-brand(href='#') Clima Hoje
@@ -48,3 +49,24 @@ html
                             p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]            
     script(src='/js/jquery.min.js')
     script(src='/js/bootstrap.min.js')
+    script.
+        function changeBg(element){
+            setTimeout(()=>{
+                $('body').css('background-image', `url(/images/${element})`);
+                changeBg();
+            }, 5000);
+        }
+
+        $(document).ready(() => {
+            let bgImages = "!{bgImages}";
+            bgImages = bgImages.split(',');
+            
+            let minLength = 0;
+            let maxLength = bgImages.length;
+
+            if(bgImages){
+                for(var i = 0; i <= maxLength-1; i++){
+                    changeBg(bgImages[i]);
+                }
+            }
+        });

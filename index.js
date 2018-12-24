@@ -24,6 +24,33 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
+const fs = require('fs');
+
+const imagesPath = path.normalize(__dirname + '/source/public/images');
+
+function getImages(){
+    return new Promise((fullfill, reject)=>{
+        fs.readdir(imagesPath, (err, files) => {
+            if(err){
+                return reject(err);
+            }else{
+                return fullfill(files);
+            }
+        });
+    });
+}
+
+let bgImages = getImages().then((data)=> {
+    let img = new Array();
+    data.forEach(element => {
+        img.push(element);
+    });
+    console.log(img);
+    return img;
+}).catch((erro) => {
+    console.log('deu erro');
+});
+
 const HGWeatherURL = 'https://api.hgbrasil.com/weather/';
 const HGWeatherKey = '948f7313';
 
@@ -76,11 +103,12 @@ app.post('/', (req, res) => {
         }
     });
    
-    Promise.all([HGWeather, OpenWeatherMap, Apixu]).then((data)=>{
+    Promise.all([HGWeather, OpenWeatherMap, Apixu, bgImages]).then((data)=>{
         res.render('index', { 
             HGWeather : data[0], 
             OpenWeatherMap : data[1],
-            Apixu : data[2]
+            Apixu : data[2],
+            bgImages : data[3]
         });
     });
    
