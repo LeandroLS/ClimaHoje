@@ -5,7 +5,16 @@ html
         meta(http-equiv="X-UA-Compatible",content="ie=edge")
         title Clima Hoje
         link(rel="stylesheet", href="/css/bootstrap.min.css")
+        style(type="text/css"). 
+            li { list-style-type: none; }
     body
+        nav.navbar.navbar-expand-md.navbar-dark.bg-dark
+            a.navbar-brand(href='#') Clima Hoje
+            button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            #navbarCollapse.collapse.navbar-collapse
+                li.nav-item
+                    #[a.nav-link(href='https://leandrols.github.io', target="_blank") Meu blog]
         div.container
             h1.text-center.text-primary Clima Hoje
             form(action="/", method="post")
@@ -13,28 +22,29 @@ html
                     input.form-control(type="text", name="city" placeholder="Local. Ex: São Paulo")
                 button.btn.btn-primary(type="submit") Pesquisar
             div.row
-                div.col-md-12
-                    if(OpenWeatherMap && OpenWeatherMap.success)
-                        p !{OpenWeatherMap.city}, !{OpenWeatherMap.temperature} °C
-                        p Fonte: #[a(href="https://openweathermap.org/", target="_blank") OpenWeatherMap]
-                    else if (OpenWeatherMap && !OpenWeatherMap.success)
-                        p.text-danger Não foi possível buscar informações de temperatura.
-                        p Fonte: #[a(href="https://openweathermap.org/", target="_blank") OpenWeatherMap]
-                div.col-md-12
-                    if(Apixu && Apixu.success)
-                        p !{Apixu.city}, !{Apixu.temperature} °C
-                        p Fonte: #[a(href="https://www.apixu.com/", target="_blank") Apixu]
-                    else if (Apixu && !Apixu.success)
-                        p.text-danger Não foi possível buscar informações de temperatura.
-                        p Fonte: #[a(href="https://www.apixu.com/", target="_blank") Apixu]
-                div.col-md-12
-                    if(HGWeather && HGWeather.success)
-                        p !{HGWeather.city} !{HGWeather.temperature} °C
-                        p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]
-                    else if (HGWeather && !HGWeather.success)
-                        p.text-danger Não foi possível buscar informações de temperatura.
-                        p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]            
-                    
-
+                if(OpenWeatherMap)
+                    div.col-md-12.list-group-item
+                        if(OpenWeatherMap.success)
+                            p !{OpenWeatherMap.city}, !{OpenWeatherMap.temperature} °C
+                            p Fonte: #[a(href="https://openweathermap.org/", target="_blank") OpenWeatherMap]
+                        else if (!OpenWeatherMap.success)
+                            p.text-danger Não foi possível buscar informações de temperatura.
+                            p Fonte: #[a(href="https://openweathermap.org/", target="_blank") OpenWeatherMap]
+                if(Apixu)
+                    div.col-md-12.list-group-item
+                        if(Apixu.success)
+                            p !{Apixu.city}, !{Apixu.temperature} °C
+                            p Fonte: #[a(href="https://www.apixu.com/", target="_blank") Apixu]
+                        else if (!Apixu.success)
+                            p.text-danger Não foi possível buscar informações de temperatura.
+                            p Fonte: #[a(href="https://www.apixu.com/", target="_blank") Apixu]
+                if(HGWeather)
+                    div.col-md-12.list-group-item
+                        if(HGWeather.success)
+                            p !{HGWeather.city} !{HGWeather.temperature} °C
+                            p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]
+                        else if (!HGWeather.success)
+                            p.text-danger Não foi possível buscar informações de temperatura.
+                            p Fonte: #[a(href="https://hgbrasil.com/status/weather/", target="_blank") HG Weather]            
     script(src='/js/jquery.min.js')
     script(src='/js/bootstrap.min.js')
