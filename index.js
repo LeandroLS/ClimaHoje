@@ -24,6 +24,10 @@ const fs = require('fs');
 
 const imagesPath = path.normalize(__dirname + '/source/public/images');
 
+let OpenWeatherMap = require('./obj/OpenWeatherMap.js');
+let Apixu = require('./obj/Apixu.js');
+let HGWeather = require('./obj/HGWeather.js');
+
 function getImages(){
     return new Promise((fullfill, reject)=>{
         fs.readdir(imagesPath, (err, files) => {
@@ -46,61 +50,17 @@ let bgImages = getImages().then((data)=> {
     console.error('deu erro');
 });
 
-const HGWeatherURL = 'https://api.hgbrasil.com/weather/';
-const HGWeatherKey = '948f7313';
-
-const OpenWeatherMapURL = 'http://api.openweathermap.org/data/2.5/weather';
-const OpenWeatherMapURLKey = '1d45b5f14ba9cbc264e3c2b018b6bdfd';
-
-const ApixuURL = 'http://api.apixu.com/v1/current.json';
-const ApixuKey = 'bb7a25ba9fc940aaa60183555182112';
-
 app.all('*', (req, res) => {
     
     if(!req.body.city) req.body.city = "São Paulo";
 
-    let HGWeather = axios.get(`${HGWeatherURL}?format=json&city_name=${encodeURI(req.body.city)}&key=${HGWeatherKey}`)
-    .then((result) => {
-            return {
-                success : true,
-                city : result.data.results.city,
-                temperature : result.data.results.temp
-            }
-        }
-    ).catch((erro) => {
-        return {
-            success : false
-        }
-    });
+    let HGWeatherPromise = HGWeather.getHGWeather(req.body.city);
 
-    let OpenWeatherMap = axios.get(`${OpenWeatherMapURL}?q=${encodeURI(req.body.city)},BR&appid=${OpenWeatherMapURLKey}&units=Metric`)
-    .then((result) => {
-            return  {
-                success : true,
-                city : result.data.name,
-                temperature : result.data.main.temp
-            }
-        }
-    ).catch((erro)=>{
-        return {
-            success: false
-        }
-    });
+    let OpenWeatherMapPromise = OpenWeatherMap.getOpenWeatherMap(req.body.city);
 
-    let Apixu = axios.get(`${ApixuURL}?key=${ApixuKey}&q=${encodeURI(req.body.city)},BR`)
-    .then((result) => {
-        return {
-            success : true,
-            city : result.data.location.name,
-            temperature : result.data.current.temp_c
-        }
-    }).catch((erro)=>{
-        return { 
-            success : false
-        }
-    });
+    let ApixuPromise = Apixu.getApixu(req.body.city);
 
-    Promise.all([HGWeather, OpenWeatherMap, Apixu, bgImages]).then((data)=>{
+    Promise.all([HGWeatherPromise, OpenWeatherMapPromise, ApixuPromise, bgImages]).then((data)=>{
         res.render('index', { 
             HGWeather : data[0], 
             OpenWeatherMap : data[1],
