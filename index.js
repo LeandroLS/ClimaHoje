@@ -18,8 +18,6 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const axios = require('axios');
-
 const fs = require('fs');
 
 const imagesPath = path.normalize(__dirname + '/source/public/images');
