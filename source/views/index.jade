@@ -50,23 +50,23 @@ html
     script(src='/js/jquery.min.js')
     script(src='/js/bootstrap.min.js')
     script.
-        function changeBg(element){
-            setTimeout(()=>{
-                $('body').css('background-image', `url(/images/${element})`);
-                changeBg();
-            }, 5000);
-        }
-
         $(document).ready(() => {
             let bgImages = "!{bgImages}";
             bgImages = bgImages.split(',');
             
             let minLength = 0;
             let maxLength = bgImages.length;
-
+            let i = 0;
+            
             if(bgImages){
-                for(var i = 0; i <= maxLength-1; i++){
-                    changeBg(bgImages[i]);
-                }
+                setInterval(() => {
+                    $('body').css('background-image', `url(/images/${bgImages[i]})`);
+                    i++;
+                    
+                    if(i == maxLength){
+                        i = 0;
+                    }
+
+                }, 30000);
             }
         });

@@ -20,10 +20,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const axios = require('axios');
 
-app.get('/', (req, res) => {
-    res.render('index');
-});
-
 const fs = require('fs');
 
 const imagesPath = path.normalize(__dirname + '/source/public/images');
@@ -45,10 +41,9 @@ let bgImages = getImages().then((data)=> {
     data.forEach(element => {
         img.push(element);
     });
-    console.log(img);
     return img;
 }).catch((erro) => {
-    console.log('deu erro');
+    console.error('deu erro');
 });
 
 const HGWeatherURL = 'https://api.hgbrasil.com/weather/';
@@ -60,7 +55,9 @@ const OpenWeatherMapURLKey = '1d45b5f14ba9cbc264e3c2b018b6bdfd';
 const ApixuURL = 'http://api.apixu.com/v1/current.json';
 const ApixuKey = 'bb7a25ba9fc940aaa60183555182112';
 
-app.post('/', (req, res) => {
+app.all('*', (req, res) => {
+    
+    if(!req.body.city) req.body.city = "São Paulo";
 
     let HGWeather = axios.get(`${HGWeatherURL}?format=json&city_name=${encodeURI(req.body.city)}&key=${HGWeatherKey}`)
     .then((result) => {
@@ -102,7 +99,7 @@ app.post('/', (req, res) => {
             success : false
         }
     });
-   
+
     Promise.all([HGWeather, OpenWeatherMap, Apixu, bgImages]).then((data)=>{
         res.render('index', { 
             HGWeather : data[0], 
