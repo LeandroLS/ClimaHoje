@@ -1,26 +1,6 @@
-const express = require('express');
-
-const app = express();
-
-const path = require('path');
-
-app.use(express.static(path.normalize(__dirname + '/source/public')));
-
-const viewsPath = path.normalize(__dirname + '/source/views/');
-
-app.set('views', viewsPath);
-
-app.set('view engine', 'jade');
-
-const bodyParser = require('body-parser');
-
-app.use(bodyParser.json());
-
-app.use(bodyParser.urlencoded({ extended: true }));
-
+const app = require('./config/app.js');
+const path = require('./config/path.js');
 const fs = require('fs');
-
-const imagesPath = path.normalize(__dirname + '/source/public/images');
 
 let OpenWeatherMap = require('./obj/OpenWeatherMap.js');
 let Apixu = require('./obj/Apixu.js');
@@ -28,7 +8,7 @@ let HGWeather = require('./obj/HGWeather.js');
 
 async function getImages(){
     let promise =  new Promise((fullfill, reject)=>{
-        fs.readdir(imagesPath, (err, files) => {
+        fs.readdir(path.imagesPath, (err, files) => {
             if(err){
                 return reject(err);
             }else{
