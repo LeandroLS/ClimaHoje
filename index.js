@@ -26,8 +26,8 @@ let OpenWeatherMap = require('./obj/OpenWeatherMap.js');
 let Apixu = require('./obj/Apixu.js');
 let HGWeather = require('./obj/HGWeather.js');
 
-function getImages(){
-    return new Promise((fullfill, reject)=>{
+async function getImages(){
+    let promise =  new Promise((fullfill, reject)=>{
         fs.readdir(imagesPath, (err, files) => {
             if(err){
                 return reject(err);
@@ -36,17 +36,11 @@ function getImages(){
             }
         });
     });
+
+    return result = await promise;
 }
 
-let bgImages = getImages().then((data)=> {
-    let img = new Array();
-    data.forEach(element => {
-        img.push(element);
-    });
-    return img;
-}).catch((erro) => {
-    console.error('deu erro');
-});
+let bgImages = getImages();
 
 app.all('*', (req, res) => {
     
