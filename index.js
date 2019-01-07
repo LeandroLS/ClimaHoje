@@ -44,3 +44,5 @@ app.all('*', (req, res) => {
 });
 
 app.listen('3000');
+
+console.log(`ClimaHoje já está rodando, acesse seu ambiente local na porta 3000 (localhost:3000) :D`);
