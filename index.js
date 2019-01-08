@@ -1,23 +1,15 @@
 const app = require('./config/app.js');
 const path = require('./config/path.js');
-const fs = require('fs');
+const { promisify }  = require('util');
+const { readdir } = require('fs');
+const readdirAsync = promisify(readdir);
 
 let OpenWeatherMap = require('./obj/OpenWeatherMap.js');
 let Apixu = require('./obj/Apixu.js');
 let HGWeather = require('./obj/HGWeather.js');
 
 async function getImages(){
-    let promise =  new Promise((fullfill, reject)=>{
-        fs.readdir(path.imagesPath, (err, files) => {
-            if(err){
-                return reject(err);
-            }else{
-                return fullfill(files);
-            }
-        });
-    });
-
-    return result = await promise;
+    return result = await readdirAsync(path.imagesPath);
 }
 
 let bgImages = getImages();
