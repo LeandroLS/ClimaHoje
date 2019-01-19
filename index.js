@@ -6,7 +6,7 @@ const readdirAsync = promisify(readdir);
 
 let OpenWeatherMap = require('./obj/OpenWeatherMap.js');
 let Apixu = require('./obj/Apixu.js');
-let HGWeather = require('./obj/HGWeather.js');
+
 
 async function getImages(){
     return result = await readdirAsync(path.imagesPath);
@@ -18,18 +18,15 @@ app.all('*', (req, res) => {
     
     if(!req.body.city) req.body.city = "São Paulo";
 
-    let HGWeatherPromise = HGWeather.getHGWeather(req.body.city);
-
-    let OpenWeatherMapPromise = OpenWeatherMap.getOpenWeatherMap(req.body.city);
+      let OpenWeatherMapPromise = OpenWeatherMap.getOpenWeatherMap(req.body.city);
 
     let ApixuPromise = Apixu.getApixu(req.body.city);
 
-    Promise.all([HGWeatherPromise, OpenWeatherMapPromise, ApixuPromise, bgImages]).then((data)=>{
+    Promise.all([OpenWeatherMapPromise, ApixuPromise, bgImages]).then((data)=>{
         res.render('index', { 
-            HGWeather : data[0], 
-            OpenWeatherMap : data[1],
-            Apixu : data[2],
-            bgImages : data[3]
+                     OpenWeatherMap : data[0],
+            Apixu : data[1],
+            bgImages : data[2]
         });
     });
    
